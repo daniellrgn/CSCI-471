@@ -1,0 +1,27 @@
+In this program I will be training and evaluating linear regression models using 
+generated datasets. To do so, the program will work in three modes: training mode, 
+prediction mode and evaluation mode. Training mode will take a set of input/output 
+pairs and find the optimal parameters that minimize the empirical risk, and output 
+the optimal model file. Prediction mode will write predicted outputs based on given 
+inputs to a file according to an already-trained model, and evaluation mode will 
+calculate the MSE of its predictions against a dev set's actual outputs. Training 
+mode will be implemented both analytically using the closed-form optimization 
+solution, and also implemented using the gradient descent algorithm for scalar inputs.
+
+I believe that the most challenging part of this program will be training the
+model. This will require a solid understanding of the math underlying the 
+process, which will take some thinking, and will be the most complex to implement
+and test. However, I think that once I have the analytical solution down, the
+gradient descent solution will come more easily as well as the polynomial fitting
+process.
+
+I plan on completing all four parts of the assignment, starting with training 
+the model analytically, then the evaluation and prediction functionalities, 
+adding the gradient descent training and finally, given that there is enough 
+time supporting polynomial fitting.
+
+Resources:
+Lecture videos on the subjects of linear regression and gradient descent, etc.
+Documentation (Java, JAMCL, RealMatrix, MatrixUtils)
+Talking through things with classmates
+Dr. Hutchinson's office hours
