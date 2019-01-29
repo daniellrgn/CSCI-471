@@ -90,9 +90,10 @@ public class Prog1 {
         // x is N x D+1 matrix from given feature file
         RealMatrix x = loadMatrix(N, D+1, args[1], true);
         // y is D vector from given output file
-        RealMatrix y = loadMatrix(N, 1, args[2], false).transpose();
+        RealMatrix y = loadMatrix(N, 1, args[2], false);
         
-        RealMatrix w = MatrixUtils.inverse(x.transpose().multiply(x)).multiply(x.transpose()).multiply(y);
+        RealMatrix z = MatrixUtils.inverse(x.transpose().multiply(x));
+        RealMatrix w = z.multiply(x.transpose()).multiply(y);
         writeMatrix(w, args[3]);
     }
 
@@ -105,9 +106,9 @@ public class Prog1 {
     // args: -pred x.txt in.model out.predictions N D K
     private static void predictMode(String[] args) {
         // x is N x D+1 matrix from given feature file
-        RealMatrix x = loadMatrix(N, D+1, args[1], true);
+        RealMatrix x = loadMatrix(N, D+1, args[1], true).transpose();
         // w is D+1 vector from given model file
-        RealMatrix w = loadMatrix(1, D+1, args[2], false);
+        RealMatrix w = loadMatrix(1, D+1, args[2], false).transpose();
 
         RealMatrix p = predict(x, w);
         writeMatrix(p, args[3]);
@@ -122,16 +123,15 @@ public class Prog1 {
     // args: -eval x.txt y.txt in.model N D K
     private static void evaluateMode(String[] args) {
         // x is N x D+1 matrix from given feature file
-        RealMatrix x = loadMatrix(N, D+1, args[1], true);
+        RealMatrix x = loadMatrix(N, D+1, args[1], true).transpose();
         // y is D vector from given output file
-        RealMatrix y = loadMatrix(N, 1, args[2], false).transpose();
+        RealMatrix y = loadMatrix(N, 1, args[2], false);
         // w is D+1 vector from given model file
-        RealMatrix w = loadMatrix(1, D+1, args[3], false);
+        RealMatrix w = loadMatrix(1, D+1, args[3], false).transpose();
 
         RealMatrix error = predict(x, w).subtract(y);
         double mse = Math.pow(error.getFrobeniusNorm(), 2) / N;
         System.out.printf("%.3e\n", mse);
-
     }
 
     private static RealMatrix loadMatrix(int n, int d, String filepath, boolean featureMatrix) {
@@ -167,7 +167,7 @@ public class Prog1 {
             
             printMatrix(matrix);
             
-            return MatrixUtils.createRealMatrix(matrix).transpose();
+            return MatrixUtils.createRealMatrix(matrix);
         } catch (FileNotFoundException fnfe) {
             System.out.printf("Could not find file %s\n", filepath);
             System.exit(1);
@@ -193,8 +193,9 @@ public class Prog1 {
             double[][] data = m.getData();
             for (double[] row : data) {
                 for (double datum : row) {
-                    bw.write(String.format("%.3e\n", datum));
+                    bw.write(String.format("%.3e ", datum));
                 }
+                System.out.println();
             }
             bw.close();
         } catch (FileNotFoundException fnfe) {
